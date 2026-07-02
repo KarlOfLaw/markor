@@ -1,60 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-/*#######################################################
- *
- *   Maintained 2017-2025 by Gregor Santner <gsantner AT mailbox DOT org>
- *
- *   License of this file: Apache 2.0
- *     https://www.apache.org/licenses/LICENSE-2.0
- *     https://github.com/gsantner/opoc/#licensing
- *
-#########################################################*/
+    Apple-style file list item
+    - White card with 18dp rounded corners, hairline border
+    - Left accent strip (Action Blue)
+    - Clean spacing using Apple spacing tokens
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/opoc_filesystem_item__root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/spacing_sm"
+    android:layout_marginEnd="@dimen/spacing_sm"
+    android:layout_marginBottom="@dimen/spacing_sm"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="horizontal"
-    android:paddingBottom="8dp">
+    android:background="@drawable/card_item_background">
 
-    <ImageView
-        android:id="@+id/opoc_filesystem_item__image"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:layout_gravity="center_vertical|start"
-        android:layout_marginRight="16dp"
-        android:importantForAccessibility="no"
-        tools:ignore="ContentDescription,RtlHardcoded"
-        tools:src="@android:drawable/btn_radio" />
+    <!-- Left accent strip -->
+    <View
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start|center_vertical"
+        android:background="@color/accent"
+        android:layout_marginVertical="8dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="@dimen/spacing_sm"
+        android:paddingEnd="@dimen/spacing_sm"
+        android:paddingRight="@dimen/spacing_sm"
+        android:paddingBottom="@dimen/spacing_sm"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/opoc_filesystem_item__title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/opoc_filesystem_item__image"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_gravity="center_vertical"
-            android:ellipsize="end"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
             android:importantForAccessibility="no"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textSize="19sp"
-            tools:text="how to write a readme.md" />
+            android:alpha="0.7"
+            tools:ignore="ContentDescription,RtlHardcoded"
+            tools:src="@android:drawable/btn_radio" />
 
-        <TextView
-            android:id="@+id/opoc_filesystem_item__description"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:ellipsize="start"
-            android:importantForAccessibility="no"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-            android:textSize="15sp"
-            tools:text="/sdcard/Documents/somewhere" />
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/opoc_filesystem_item__title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:importantForAccessibility="no"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:singleLine="true"
+                tools:text="how to write a readme.md" />
+
+            <TextView
+                android:id="@+id/opoc_filesystem_item__description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="start"
+                android:importantForAccessibility="no"
+                android:singleLine="true"
+                android:textColor="@color/secondary_text"
+                android:textSize="13sp"
+                tools:text="/sdcard/Documents/somewhere" />
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>

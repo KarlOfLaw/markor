@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-/*#######################################################
- *
- *   Maintained 2017-2025 by Gregor Santner <gsantner AT mailbox DOT org>
- *
- *   License of this file: Apache 2.0
- *     https://www.apache.org/licenses/LICENSE-2.0
- *     https://github.com/gsantner/opoc/#licensing
- *
-#########################################################*/
+    Apple-style file system dialog
+    - Clean surfaces, hairline borders, single blue accent
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,7 +8,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="4dp"
     android:animateLayoutChanges="true">
 
     <androidx.appcompat.widget.Toolbar
@@ -23,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
     </androidx.appcompat.widget.Toolbar>
@@ -47,6 +39,8 @@
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
         android:minHeight="100dp"
+        android:clipToPadding="false"
+        android:paddingTop="4dp"
         app:layout_constraintTop_toBottomOf="@id/ui__filesystem_dialog__search_edit"
         app:layout_constraintBottom_toTopOf="@id/ui__filesystem_dialog__buttons"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
@@ -110,7 +104,7 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:textColor="@color/primary"
+            android:textColor="@color/accent"
             tools:text="" />
 
         <!-- Flexible spacer -->
@@ -127,7 +121,7 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:textColor="@color/primary"
+            android:textColor="@color/accent"
             tools:text="Cancel" />
 
         <!-- OK Button: Right aligned -->
@@ -138,7 +132,7 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
-            android:textColor="@color/primary"
+            android:textColor="@color/accent"
             tools:text="OK" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

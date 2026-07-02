@@ -138,14 +138,97 @@ public abstract class TextConverterBase {
      */
     public abstract String convertMarkup(String markup, Context context, boolean lightMode, boolean lineNum, File file);
 
+    /**
+     * Get the effective dark mode for the selected preview theme.
+     * Some themes like "dracula" and "amoled" are always dark regardless of system.
+     */
+    public static boolean isPreviewThemeEffectivelyDark(Context context, String themeKey) {
+        if (themeKey == null) {
+            return GsContextUtils.instance.isDarkModeEnabled(context);
+        }
+        switch (themeKey) {
+            case "dracula":
+            case "amoled":
+                return true;
+            default:
+                return GsContextUtils.instance.isDarkModeEnabled(context);
+        }
+    }
+
+    /**
+     * Get the CSS block for a given preview theme.
+     * Each theme provides light and dark variants.
+     */
+    public static String getPreviewThemeCss(String themeKey, boolean darkTheme, Context context) {
+        // Default (Auto) - uses the original hardcoded light/dark CSS
+        if (themeKey == null || themeKey.equals("default") || themeKey.isEmpty()) {
+            return darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT;
+        }
+
+        // Build CSS based on theme selection
+        final String bg, text, blockquote, aVisited, codeBg;
+        switch (themeKey) {
+            case "sepia":
+                if (darkTheme) {
+                    bg = "#2B2416"; text = "#D4C5A9"; blockquote = "#8B7355"; aVisited = "#A0906A"; codeBg = "#3C3225";
+                } else {
+                    bg = "#FBF0D9"; text = "#5B4636"; blockquote = "#8B7355"; aVisited = "#5B4636"; codeBg = "#F5EBD0";
+                }
+                break;
+            case "solarized":
+                if (darkTheme) {
+                    bg = "#002B36"; text = "#93A1A1"; blockquote = "#586E75"; aVisited = "#657B83"; codeBg = "#073642";
+                } else {
+                    bg = "#FDF6E3"; text = "#586E75"; blockquote = "#93A1A1"; aVisited = "#586E75"; codeBg = "#EEE8DB";
+                }
+                break;
+            case "nord":
+                if (darkTheme) {
+                    bg = "#2E3440"; text = "#D8DEE9"; blockquote = "#81A1C1"; aVisited = "#88C0D0"; codeBg = "#3B4252";
+                } else {
+                    bg = "#ECEFF4"; text = "#2E3440"; blockquote = "#4C566A"; aVisited = "#5E81AC"; codeBg = "#E5E9ED";
+                }
+                break;
+            case "gruvbox":
+                if (darkTheme) {
+                    bg = "#282828"; text = "#EBDBB2"; blockquote = "#A89984"; aVisited = "#8EC07C"; codeBg = "#3C3836";
+                } else {
+                    bg = "#FBF1C7"; text = "#3C3836"; blockquote = "#7C6F64"; aVisited = "#98971A"; codeBg = "#F2E5B3";
+                }
+                break;
+            case "dracula":
+                bg = "#282A36"; text = "#F8F8F2"; blockquote = "#6272A4"; aVisited = "#BD93F9"; codeBg = "#21222C";
+                break;
+            case "amoled":
+                bg = "#000000"; text = "#FFFFFF"; blockquote = "#AAAAAA"; aVisited = "#DDDDDD"; codeBg = "#111111";
+                break;
+            default:
+                return darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT;
+        }
+
+        return CSS_S + "html,body{color:" + text + ";background-color:" + bg + ";}"
+                + "a:visited{color:" + aVisited + ";}"
+                + "blockquote{color:" + blockquote + ";}"
+                + ":not(pre) > code { background-color:" + codeBg + "80; padding: 1.25px 2.8px; border-radius: 4px; overflow-wrap: break-word; }"
+                + CSS_E;
+    }
+
     protected String putContentIntoTemplate(Context context, String content, boolean isExportInLightMode, File file, String onLoadJs, String head) {
         final AppSettings as = AppSettings.get(context);
         final String contentLower = content.toLowerCase();
         boolean darkTheme = GsContextUtils.instance.isDarkModeEnabled(context) && !isExportInLightMode;
-        String html = HTML_DOCTYPE + HTML001_HEAD_WITH_BASESTYLE.replace(TOKEN_POST_LANG, Locale.getDefault().getLanguage()) + (darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT);
+        String themeKey = as.getViewModePreviewTheme();
+        // For export/print mode, force "default" theme (so it exports cleanly)
         if (isExportInLightMode) {
-            html = html.replace("html,body{color:#303030;}", "html,body{color: black !important; background-color: white !important;}");
+            themeKey = "default";
+            darkTheme = false;
         }
+        // Override darkTheme for themes that are always dark/light
+        if (!themeKey.equals("default")) {
+            darkTheme = isPreviewThemeEffectivelyDark(context, themeKey);
+        }
+        String themeCss = getPreviewThemeCss(themeKey, darkTheme, context);
+        String html = HTML_DOCTYPE + HTML001_HEAD_WITH_BASESTYLE.replace(TOKEN_POST_LANG, Locale.getDefault().getLanguage()) + themeCss;
         html += HTML004_HEAD_META_VIEWPORT_MOBILE + CSS_TABLE_STYLE + CSS_CLASS_FLOAT + CSS_BUTTON_STYLE_MATERIAL + CSS_BUTTON_STYLE_EMOJIBTN + CSS_CLASS_STICKY;
         if (as.isRenderRtl()) {
             html += HTML003_RIGHT_TO_LEFT;

@@ -1,9 +1,20 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">10dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Apple Design System spacing (DESIGN-apple.md) -->
+    <dimen name="activity_horizontal_margin">17dp</dimen>
+    <dimen name="activity_vertical_margin">17dp</dimen>
     <dimen name="editor_bottom_margin">32dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="text_actions_bar_height">46dp</dimen>
-    <dimen name="dialog_corner_radius">16dp</dimen>
+    <!-- Apple rounded.lg = 18px for cards -->
+    <dimen name="dialog_corner_radius">18dp</dimen>
+    <!-- Card item spacing -->
+    <dimen name="card_item_spacing">12dp</dimen>
+    <dimen name="card_item_padding">17dp</dimen>
+    <dimen name="card_corner_radius">18dp</dimen>
+    <!-- Apple spacing tokens -->
+    <dimen name="spacing_xs">8dp</dimen>
+    <dimen name="spacing_sm">12dp</dimen>
+    <dimen name="spacing_md">17dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
 </resources>

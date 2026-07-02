@@ -20,6 +20,11 @@ buildscript {
     }
 
     repositories {
+        // 国内镜像源（加速下载）
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter/' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
         mavenCentral()
         maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
@@ -40,6 +45,9 @@ buildscript {
 
 allprojects {
     repositories {
+        // 国内镜像源（加速下载）
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google/' }
         mavenCentral()
         maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }

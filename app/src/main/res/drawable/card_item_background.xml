@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Apple-style card background
+    - White fill, 18dp rounded corners
+    - 0.5px hairline border
+    - No shadows (Apple rule: shadows reserved for product imagery only)
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/canvas"/>
+    <corners android:radius="@dimen/card_corner_radius"/>
+    <stroke
+        android:width="0.5dp"
+        android:color="@color/divider"/>
+</shape>

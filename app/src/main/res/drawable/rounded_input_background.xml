@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Apple-style input background
+    - White fill, 11dp rounded (Apple rounded.md)
+    - Hairline border
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/canvas"/>
+    <corners android:radius="11dp"/>
+    <stroke
+        android:width="0.5dp"
+        android:color="@color/divider"/>
+</shape>

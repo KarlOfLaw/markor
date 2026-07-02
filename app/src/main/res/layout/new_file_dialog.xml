@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-    /*#######################################################
-    *
-    *   Maintained 2018-2025 by Gregor Santner <gsantner AT mailbox DOT org>
-    *
-    *   License: Apache 2.0
-    *  https://github.com/gsantner/opoc/#licensing
-    *  https://www.apache.org/licenses/LICENSE-2.0
-    *
-    #########################################################*/
+    Apple-style new file dialog
+    - Clean spacing, rounded inputs, single blue accent
 -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -35,12 +28,13 @@
             android:ellipsize="end"
             android:lines="1"
             android:text="@string/name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+            android:textColor="@color/secondary_text"
+            android:textSize="13sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
+            android:layout_marginTop="6dp"
             android:orientation="horizontal"
             android:weightSum="100">
 
@@ -50,11 +44,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="75"
+                android:background="@drawable/rounded_input_background"
                 android:hint="@string/title"
                 android:importantForAutofill="no"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/light_grey"
                 android:textSize="15sp"
+                android:padding="12dp"
+                android:layout_marginEnd="8dp"
                 tools:ignore="HardcodedText,TextFields" />
 
             <EditText
@@ -62,34 +60,36 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_weight="25"
+                android:background="@drawable/rounded_input_background"
                 android:gravity="start"
                 android:hint=".md ..."
                 android:importantForAutofill="no"
                 android:inputType="text|textNoSuggestions"
                 android:lines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/light_grey"
                 android:textSize="15sp"
+                android:padding="12dp"
                 tools:ignore="HardcodedText"
                 tools:text=".md" />
         </LinearLayout>
-
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="12dp"
             android:ellipsize="end"
             android:lines="1"
             android:text="@string/format"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+            android:textColor="@color/secondary_text"
+            android:textSize="13sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
+            android:layout_marginTop="6dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:orientation="horizontal"
@@ -100,11 +100,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:background="@drawable/rounded_input_background"
                 android:hint="{{title}}"
                 android:importantForAutofill="no"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/light_grey"
                 android:textSize="15sp"
+                android:padding="12dp"
                 tools:ignore="HardcodedText,TextFields" />
 
             <TextView
@@ -123,68 +126,74 @@
 
         </RelativeLayout>
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="12dp"
             android:ellipsize="end"
             android:lines="1"
             android:text="@string/type"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+            android:textColor="@color/secondary_text"
+            android:textSize="13sp" />
 
         <view
             android:id="@+id/new_file_dialog__type"
             class="net.gsantner.markor.frontend.NewFileDialog$ReselectSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:drawSelectorOnTop="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="12dp"
             android:ellipsize="end"
             android:lines="1"
             android:text="@string/template"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+            android:textColor="@color/secondary_text"
+            android:textSize="13sp" />
 
         <view
             android:id="@+id/new_file_dialog__template"
             class="net.gsantner.markor.frontend.NewFileDialog$ReselectSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:drawSelectorOnTop="true" />
 
         <CheckBox
             android:id="@+id/new_file_dialog__encrypt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/encrypt_file_content" />
+            android:layout_marginTop="12dp"
+            android:text="@string/encrypt_file_content"
+            android:textColor="@color/primary_text" />
 
         <CheckBox
             android:id="@+id/new_file_dialog__utf8_bom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/utf8_with_bom" />
+            android:text="@string/utf8_with_bom"
+            android:textColor="@color/primary_text" />
 
         <TextView
-            style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/folder_is_created_without_extension" />
+            android:text="@string/folder_is_created_without_extension"
+            android:textColor="@color/secondary_text"
+            android:textSize="13sp" />
 
         <TextView
-            style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/keep_existing_file" />
-
+            android:text="@string/keep_existing_file"
+            android:textColor="@color/secondary_text"
+            android:textSize="13sp" />
 
     </LinearLayout>
 </ScrollView>

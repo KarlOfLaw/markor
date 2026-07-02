@@ -953,6 +953,10 @@ public class AppSettings extends GsSharedPreferencesPropertyBackend {
         return GsTextUtils.colorToHexString(getInt(R.string.pref_key__view_mode_link_color, Color.parseColor("#388E3C")));
     }
 
+    public String getViewModePreviewTheme() {
+        return getString(R.string.pref_key__markdown_view_theme, "default");
+    }
+
     public String getUnorderedListCharacter() {
         return getString(R.string.pref_key__editor_unordered_list_character, "-");
     }

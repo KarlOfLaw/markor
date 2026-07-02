@@ -5,12 +5,17 @@
  *   License of this file: Apache 2.0
  *     https://www.apache.org/licenses/LICENSE-2.0
  *
+ *   Color palette adapted from Apple Design System (DESIGN-apple.md)
+ *   - Action Blue (#0066CC) as the single accent color
+ *   - Ink (#1D1D1F) for primary text
+ *   - Parchment (#F5F5F7) for background
+ *
 #########################################################*/
 -->
 <resources>
     <!-- Named colors -->
     <color name="colorPrimary">@color/primary</color>
-    <color name="colorPrimaryDark">@color/primary</color>
+    <color name="colorPrimaryDark">@color/surface_black</color>
     <color name="primary_text">@color/light__primary_text</color>
     <color name="secondary_text">@color/light__secondary_text</color>
     <color name="file">@color/light__file</color>
@@ -20,34 +25,44 @@
     <!-- Named colors differing common to day and night -->
     <color name="colorAccent">@color/accent</color>
 
-    <!-- Color values -->
-    <color name="primary">#1E2135</color>
-    <color name="accent">#F04B4B</color>
-    <color name="divider">#808080</color>
+    <!-- Apple Design System Colors -->
+    <color name="primary">#0066CC</color>              <!-- Action Blue - single accent -->
+    <color name="primary_dark">#004C99</color>
+    <color name="accent">#0066CC</color>               <!-- Same as primary - single accent rule -->
+    <color name="divider">#E0E0E0</color>              <!-- Hairline -->
 
-    <color name="accent_light">#FF9800</color>
-    <color name="default_link_color">#388E3C</color>
+    <color name="accent_light">#2997FF</color>
+    <color name="default_link_color">#0066CC</color>
 
-    <color name="light__background">#EEEEEE</color>
-    <color name="light__primary_text">#DE000000</color>
-    <color name="light__secondary_text">#99000000</color>
-    <color name="light__file">#757575</color>
-    <color name="light__folder">#757575</color>
+    <!-- Light theme (parchment canvas) -->
+    <color name="light__background">#F5F5F7</color>     <!-- Canvas Parchment -->
+    <color name="light__primary_text">#1D1D1F</color>   <!-- Ink -->
+    <color name="light__secondary_text">#7A7A7A</color> <!-- Ink Muted 48 -->
+    <color name="light__file">#333333</color>            <!-- Ink Muted 80 -->
+    <color name="light__folder">#0066CC</color>          <!-- Action Blue -->
 
-    <color name="dark__background">@color/dark_grey</color>
-    <color name="dark__primary_text">#DDFFFFFF</color>
-    <color name="dark__secondary_text">#9E9E9E</color>
-    <color name="dark__file">#9E9E9E</color>
-    <color name="dark__folder">#9E9E9E</color>
+    <!-- Dark theme -->
+    <color name="dark__background">#1C1C1E</color>
+    <color name="dark__primary_text">#FFFFFF</color>
+    <color name="dark__secondary_text">#AEAEB2</color>
+    <color name="dark__file">#AEAEB2</color>
+    <color name="dark__folder">#2997FF</color>           <!-- Sky Link Blue for dark -->
 
     <color name="ic_launcher_background">#636363</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#000000</color>
     <color name="grey">#FF505050</color>
-    <color name="dark_grey">#FF212121</color>
+    <color name="dark_grey">#1C1C1E</color>
     <color name="light_grey">#FFC0C0C0</color>
     <color name="lighter_grey">#FFE0E0E0</color>
 
+    <!-- Surface colors -->
+    <color name="surface_black">#000000</color>
+    <color name="canvas">#FFFFFF</color>
+    <color name="surface_pearl">#FAFAFC</color>
+    <color name="badge_bg">#E8F0FE</color>              <!-- Action Blue at 12% opacity -->
+
+    <!-- Editor syntax highlighting schemes (unchanged) -->
     <color name="solarized_bg_dark">#002B36</color>
     <color name="solarized_bg_light">#FCF5E4</color>
     <color name="solarized_fg">#657B83</color>
@@ -66,7 +81,7 @@
     <color name="nord_bg_light">#ECEFF4</color>
     <color name="nord_fg_light">#2E3440</color>
 
-    <color name="link">#FF1EA3FD</color>;
+    <color name="link">#0066CC</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="light_border">@color/lighter_grey</color>
 </resources>

@@ -52,6 +52,14 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
 
     <string name="document_editor_font">Document Editor Font</string>
     <string name="theme">Theme</string>
+    <string name="markdown_view_theme">Markdown Preview Theme</string>
+    <string name="markdown_preview_theme_default">Auto (Follow Dark Mode)</string>
+    <string name="markdown_preview_theme_sepia">Sepia</string>
+    <string name="markdown_preview_theme_solarized">Solarized</string>
+    <string name="markdown_preview_theme_nord">Nord</string>
+    <string name="markdown_preview_theme_gruvbox">Gruvbox</string>
+    <string name="markdown_preview_theme_dracula">Dracula</string>
+    <string name="markdown_preview_theme_amoled">AMOLED Black</string>
     <string name="open_existing_files_in_view_mode">Open existing files in view mode</string>
     <string name="about">About</string>
     <string name="plaintext">Plain Text</string>

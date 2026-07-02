@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-/*#######################################################
- *
- *   Maintained 2017-2025 by Gregor Santner <gsantner AT mailbox DOT org>
- *
- *   License of this file: Apache 2.0
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
-#########################################################*/
+    Apple-style editor layout
+    - Editor area on white (canvas) background
+    - Toolbar area on parchment (background)
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -45,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:baselineAligned="false"
-                    android:background="@color/background"
+                    android:background="@color/canvas"
                     android:clickable="true"
                     android:orientation="horizontal">
 
@@ -60,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:alpha="0"
-                        android:background="@color/background"
+                        android:background="@color/canvas"
                         android:gravity="top"
                         android:imeOptions="flagNoExtractUi"
                         android:inputType="textMultiLine|textCapSentences"
@@ -89,17 +84,17 @@
             android:id="@+id/document__fragment__edit__text_actions_bar__scrolling_parent"
             android:layout_width="match_parent"
             android:layout_height="@dimen/text_actions_bar_height"
-            android:background="@color/background"
-            android:elevation="4dp"
+            android:background="@color/canvas"
+            android:elevation="0dp"
             android:paddingTop="4dp"
             android:scrollbars="none"
-            android:translationZ="4dp">
+            android:translationZ="0dp">
 
             <LinearLayout
                 android:id="@+id/document__fragment__edit__text_actions_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/canvas"
                 android:orientation="horizontal" />
         </net.gsantner.opoc.frontend.GsHorizontalScrollView>
     </LinearLayout>
@@ -108,6 +103,6 @@
         android:id="@+id/document__fragment_fullscreen_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background"
+        android:background="@color/canvas"
         android:visibility="gone" />
 </FrameLayout>

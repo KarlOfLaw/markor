@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Named colors -->
-    <color name="colorPrimary">@color/primary</color>
+    <color name="colorPrimary">@color/dark_grey</color>
     <color name="primary_text">@color/dark__primary_text</color>
     <color name="secondary_text">@color/dark__secondary_text</color>
     <color name="file">@color/dark__file</color>

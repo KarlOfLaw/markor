@@ -276,9 +276,13 @@ public class MarkdownTextConverter extends TextConverterBase {
             }
         }
 
+        // Determine effective dark mode based on selected preview theme
+        final String previewThemeKey = as.getViewModePreviewTheme();
+        final boolean previewThemeDark = TextConverterBase.isPreviewThemeEffectivelyDark(context, previewThemeKey);
+
         // Enable code block (view mode) syntax highlighting
         if (markup.contains("```")) {
-            head += getViewHlPrismIncludes(GsContextUtils.instance.isDarkModeEnabled(context) ? "-tomorrow" : "");
+            head += getViewHlPrismIncludes(previewThemeDark ? "-tomorrow" : "");
             onLoadJs += "usePrism('" + (file == null ? "false" : as.getDocumentWrapState(file.getAbsolutePath())) + "', '" + enableLineNumbers + "');";
         }
 
@@ -286,7 +290,7 @@ public class MarkdownTextConverter extends TextConverterBase {
         if (markup.contains("```mermaid")) {
             head += HTML_MERMAID_INCLUDE
                     + "<script>mermaid.initialize({theme:'"
-                    + (GsContextUtils.instance.isDarkModeEnabled(context) ? "dark" : "default")
+                    + (previewThemeDark ? "dark" : "default")
                     + "',logLevel:5,securityLevel:'loose'});</script>";
         }
 

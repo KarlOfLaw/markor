@@ -400,6 +400,16 @@
         android:summary="@string/display_converted_markup"
         android:title="@string/view_mode">
 
+        <ListPreference
+            android:defaultValue="default"
+            android:dialogTitle="@string/markdown_view_theme"
+            android:entries="@array/pref_arrdisp__markdown_view_themes"
+            android:entryValues="@array/pref_arrkeys__markdown_view_themes"
+            android:icon="@drawable/ic_palette_black_24dp"
+            android:key="@string/pref_key__markdown_view_theme"
+            android:summary="%1$s"
+            android:title="@string/markdown_view_theme" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_visibility_black_24dp"
