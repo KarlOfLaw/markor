@@ -168,6 +168,11 @@
             android:label="@string/about" />
 
         <activity
+            android:name=".activity.CssEditorActivity"
+            android:label="@string/custom_markdown_css"
+            android:parentActivityName=".activity.SettingsActivity" />
+
+        <activity
             android:name=".activity.openeditor.OpenEditorQuickNoteActivity"
             android:enabled="false"
             android:exported="true"

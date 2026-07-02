@@ -496,4 +496,11 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="capitalize_sentences">大写句首字母 (a note→A note)</string>
     <string name="use_tab_to_indent">使用 Tab 键缩进行</string>
     <string name="folder_local">本地文件夹</string>
+
+    <!-- Custom CSS Editor -->
+    <string name="custom_markdown_css">自定义预览 CSS</string>
+    <string name="custom_markdown_css_summary">直接输入 CSS 代码（在预览主题设为 \"Custom CSS\" 时生效）</string>
+    <string name="custom_css_hint">/* 在此输入自定义 CSS */\n\nhtml, body {\n  color: #333;\n  background-color: #fff;\n}\n\nh1, h2 {\n  border-bottom: 1px solid #eaecef;\n}\n\nblockquote {\n  border-left: 4px solid #dfe2e5;\n  color: #6a737d;\n}</string>
+    <string name="custom_css_saved">CSS 已保存</string>
+    <string name="custom_css_not_set">未设置</string>
 </resources>

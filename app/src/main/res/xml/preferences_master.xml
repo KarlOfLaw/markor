@@ -435,9 +435,8 @@
                 android:icon="@drawable/ic_add_white_24dp"
                 android:key="@string/pref_key__inject_to_body"
                 android:title="@string/inject_to_body" />
-            <androidx.preference.EditTextPreference
-                android:defaultValue="@string/empty_string"
-                android:icon="@drawable/ic_add_white_24dp"
+            <Preference
+                android:icon="@drawable/ic_code_black_24dp"
                 android:key="@string/pref_key__custom_markdown_css"
                 android:summary="@string/custom_markdown_css_summary"
                 android:title="@string/custom_markdown_css" />

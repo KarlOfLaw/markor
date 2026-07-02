@@ -63,6 +63,9 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="markdown_preview_theme_custom">Custom CSS</string>
     <string name="custom_markdown_css">Custom Preview CSS</string>
     <string name="custom_markdown_css_summary">Enter CSS code directly (used when theme is set to \"Custom CSS\")</string>
+    <string name="custom_css_hint">/* Enter your custom CSS here */\n\nhtml, body {\n  color: #333;\n  background-color: #fff;\n}\n\nh1, h2 {\n  border-bottom: 1px solid #eaecef;\n}\n\nblockquote {\n  border-left: 4px solid #dfe2e5;\n  color: #6a737d;\n}</string>
+    <string name="custom_css_saved">CSS saved</string>
+    <string name="custom_css_not_set">Not set</string>
     <string name="open_existing_files_in_view_mode">Open existing files in view mode</string>
     <string name="about">About</string>
     <string name="plaintext">Plain Text</string>

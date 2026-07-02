@@ -144,6 +144,12 @@ public class SettingsActivity extends MarkorBaseActivity {
         public static final String TAG = "SettingsFragmentMaster";
 
         @Override
+        public void onResume() {
+            super.onResume();
+            doUpdatePreferences();
+        }
+
+        @Override
         public int getPreferenceResourceForInflation() {
             return R.xml.preferences_master;
         }
@@ -172,6 +178,18 @@ public class SettingsActivity extends MarkorBaseActivity {
             updateSummary(R.string.pref_key__exts_to_always_open_in_this_app, _appSettings.getString(R.string.pref_key__exts_to_always_open_in_this_app, ""));
 
             updateSummary(R.string.pref_key__snippet_directory_path, _appSettings.getSnippetsDirectory().getAbsolutePath());
+
+            // Update custom CSS preference summary with a preview of the code
+            final String customCss = _appSettings.getCustomMarkdownCssCode();
+            if (TextUtils.isEmpty(customCss)) {
+                updateSummary(R.string.pref_key__custom_markdown_css, getString(R.string.custom_css_not_set));
+            } else {
+                String preview = customCss.replace("\n", " ").trim();
+                if (preview.length() > 60) {
+                    preview = preview.substring(0, 60) + "...";
+                }
+                updateSummary(R.string.pref_key__custom_markdown_css, preview);
+            }
 
             final String fileDescFormat = _appSettings.getString(R.string.pref_key__file_description_format, "");
             if (fileDescFormat.equals("")) {
@@ -365,6 +383,10 @@ public class SettingsActivity extends MarkorBaseActivity {
                     _appSettings.setEditorBasicColor(false, R.color.sepia_fg_light__bg_dark, R.color.sepia_bg_light__fg_dark);
                     _appSettings.setRecreateMainRequired(true);
                     break;
+                }
+                case R.string.pref_key__custom_markdown_css: {
+                    startActivity(new Intent(getActivity(), CssEditorActivity.class));
+                    return true;
                 }
                 case R.string.pref_key__plaintext__reorder_actions:
                 case R.string.pref_key__asciidoc__reorder_actions:
