@@ -13,6 +13,7 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.ColorInt;
@@ -979,6 +980,38 @@ public class AppSettings extends GsSharedPreferencesPropertyBackend {
 
     public String getViewModePreviewTheme() {
         return getString(R.string.pref_key__markdown_view_theme, "default");
+    }
+
+    public String getCustomMarkdownCssFilePath() {
+        return getString(R.string.pref_key__custom_markdown_css_file, "");
+    }
+
+    /**
+     * Read the custom markdown preview CSS file from disk.
+     * Returns file contents wrapped in &lt;style&gt; tags, or empty string if not configured / not found.
+     */
+    public String getCustomMarkdownCssContent() {
+        final String path = getCustomMarkdownCssFilePath();
+        if (TextUtils.isEmpty(path)) {
+            return "";
+        }
+        try {
+            final File cssFile = new File(path);
+            if (!cssFile.isFile() || !cssFile.canRead()) {
+                return "";
+            }
+            final String css = GsFileUtils.readTextFile(cssFile);
+            if (TextUtils.isEmpty(css)) {
+                return "";
+            }
+            // Wrap bare CSS (no <style> tag) so it works inside HTML head
+            if (!css.contains("<style")) {
+                return "<style type='text/css'>" + css + "</style>";
+            }
+            return css;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public String getUnorderedListCharacter() {

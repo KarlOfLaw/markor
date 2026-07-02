@@ -60,6 +60,9 @@ work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
     <string name="markdown_preview_theme_gruvbox">Gruvbox</string>
     <string name="markdown_preview_theme_dracula">Dracula</string>
     <string name="markdown_preview_theme_amoled">AMOLED Black</string>
+    <string name="markdown_preview_theme_custom">Custom CSS</string>
+    <string name="custom_markdown_css_file">Custom Preview CSS File</string>
+    <string name="custom_markdown_css_file_summary">Absolute path to .css file (used when theme is set to \"Custom CSS\")</string>
     <string name="open_existing_files_in_view_mode">Open existing files in view mode</string>
     <string name="about">About</string>
     <string name="plaintext">Plain Text</string>

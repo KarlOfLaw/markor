@@ -10,6 +10,7 @@ package net.gsantner.markor.format;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.webkit.WebView;
 
@@ -58,8 +59,8 @@ public abstract class TextConverterBase {
 
     protected static final String HTML_DOCTYPE = "<!DOCTYPE html>";
     protected static final String HTML001_HEAD_WITH_BASESTYLE = "<html lang='" + TOKEN_POST_LANG + "'><head><meta charset='UTF-8'>" + CSS_S + "html,body{padding:4px 8px 4px 8px;font-family:'" + TOKEN_FONT + "';}h1,h2,h3,h4,h5,h6{font-family:'sans-serif-condensed';}a{color: " + TOKEN_LINK_COLOR + ";text-decoration:underline;}img{height:auto;max-width:100%;max-height: 90vh;margin:auto;}" + CSS_E;
-    protected static final String HTML002_HEAD_WITH_STYLE_LIGHT = CSS_S + "html,body{color:#303030;}blockquote{color:#73747d;}" + CSS_E;
-    protected static final String HTML002_HEAD_WITH_STYLE_DARK = CSS_S + "html,body{color:#ffffff;background-color:#303030;}a:visited{color:#dddddd;}blockquote{color:#cccccc;}" + CSS_E;
+    protected static final String HTML002_HEAD_WITH_STYLE_LIGHT = CSS_S + "html,body{color:#303030;}blockquote{color:#73747d;}:not(pre) > code{background-color:#D2D2D880;padding:1.25px 2.8px;border-radius:4px;overflow-wrap:break-word;}" + CSS_E;
+    protected static final String HTML002_HEAD_WITH_STYLE_DARK = CSS_S + "html,body{color:#ffffff;background-color:#303030;}a:visited{color:#dddddd;}blockquote{color:#cccccc;}:not(pre) > code{background-color:#50505080;padding:1.25px 2.8px;border-radius:4px;overflow-wrap:break-word;}" + CSS_E;
     protected static final String HTML003_RIGHT_TO_LEFT = CSS_S + "body{text-align:" + TOKEN_TEXT_DIRECTION + ";direction:rtl;}" + CSS_E;
     protected static final String HTML004_HEAD_META_VIEWPORT_MOBILE = "<style>video, img { max-width: 100%; } pre { max-width: 100%; overflow: auto; } </style>";//"<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'>";
     protected static final String HTML100_PERCENT_IN_FILEPATH = "<base>" + JS_S + "var newbase = document.baseURI.split('%').join('%25'); document.querySelector('base').setAttribute('href', newbase);" + JS_E;
@@ -165,6 +166,17 @@ public abstract class TextConverterBase {
             return darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT;
         }
 
+        // Custom CSS theme: read from user-specified CSS file (Typora-style)
+        if (themeKey.equals("custom")) {
+            final AppSettings as = AppSettings.get(context);
+            final String customCss = as.getCustomMarkdownCssContent();
+            if (!TextUtils.isEmpty(customCss)) {
+                return customCss;
+            }
+            // Fallback to auto theme if no custom CSS configured
+            return darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT;
+        }
+
         // Build CSS based on theme selection
         final String bg, text, blockquote, aVisited, codeBg;
         switch (themeKey) {
@@ -234,7 +246,9 @@ public abstract class TextConverterBase {
             html += HTML003_RIGHT_TO_LEFT;
         }
 
-        html += head + as.getInjectedHeader();
+        // When theme is "custom", custom CSS is already served via getPreviewThemeCss() - skip duplicate
+        final String extraCss = themeKey.equals("custom") ? "" : as.getCustomMarkdownCssContent();
+        html += head + extraCss + as.getInjectedHeader();
 
         html += HTML_ON_PAGE_LOAD_S + onLoadJs + HTML_ON_PAGE_LOAD_E;
 

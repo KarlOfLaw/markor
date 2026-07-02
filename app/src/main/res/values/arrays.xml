@@ -25,6 +25,7 @@
         <item translatable="false">@string/markdown_preview_theme_gruvbox</item>
         <item translatable="false">@string/markdown_preview_theme_dracula</item>
         <item translatable="false">@string/markdown_preview_theme_amoled</item>
+        <item translatable="false">@string/markdown_preview_theme_custom</item>
     </string-array>
 
     <string-array name="pref_arrkeys__markdown_view_themes" translatable="false">
@@ -35,6 +36,7 @@
         <item translatable="false">gruvbox</item>
         <item translatable="false">dracula</item>
         <item translatable="false">amoled</item>
+        <item translatable="false">custom</item>
     </string-array>
 
     <string-array name="pref_arrkeys__app_themes" translatable="false">
