@@ -49,7 +49,13 @@ public class StoragePermissionActivity extends MarkorBaseActivity {
         }
 
         if (_cu.checkExternalStoragePermission(this)) {
-            GsContextUtils.instance.animateToActivity(this, MainActivity.class, true, 0);
+            try {
+                GsContextUtils.instance.animateToActivity(this, MainActivity.class, true, 0);
+            } catch (Exception e) {
+                // 过渡动画失败时直接跳转
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
         } else {
             Toast.makeText(this, R.string.permission_not_granted, Toast.LENGTH_SHORT).show();
             askForPermissions();

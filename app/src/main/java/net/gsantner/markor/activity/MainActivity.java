@@ -134,7 +134,7 @@ public class MainActivity extends MarkorBaseActivity implements GsFileBrowserFra
         final File fallback = _appSettings.getFolderToLoadByMenuId(_appSettings.getAppStartupFolderMenuId());
         final Intent intent = getIntent();
         _startFolder = MarkorContextUtils.getValidIntentFile(intent, fallback);
-        if (!GsFileUtils.isDirectory(_startFolder)) {
+        if (_startFolder != null && !GsFileUtils.isDirectory(_startFolder)) {
             _showFile = _startFolder;
             _startFolder = _startFolder.getParentFile();
         }

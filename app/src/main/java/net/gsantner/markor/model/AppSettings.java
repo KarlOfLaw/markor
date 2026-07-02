@@ -74,7 +74,11 @@ public class AppSettings extends GsSharedPreferencesPropertyBackend {
         _prefCache = context.getSharedPreferences("cache", Context.MODE_PRIVATE);
         _prefHistory = context.getSharedPreferences("history", Context.MODE_PRIVATE);
         _cu = new MarkorContextUtils(context);
-        _isDeviceGoodHardware = _cu.isDeviceGoodHardware(context);
+        try {
+            _isDeviceGoodHardware = _cu.isDeviceGoodHardware(context);
+        } catch (Exception e) {
+            _isDeviceGoodHardware = false;
+        }
 
         if (getInt(R.string.pref_key__basic_color_scheme__bg_light, -999) == -999) {
             setEditorBasicColor(true, R.color.white, R.color.dark_grey);
@@ -99,8 +103,22 @@ public class AppSettings extends GsSharedPreferencesPropertyBackend {
     }
 
     public File getDefaultNotebookFile() {
+        // Environment.getExternalStorageDirectory() 已在多个 Android 版本中废弃
+        // 在 Android 16+ 上可能返回 null，使用 fallback
+        File extDir;
+        try {
+            extDir = Environment.getExternalStorageDirectory();
+        } catch (Exception e) {
+            extDir = null;
+        }
+        if (extDir == null) {
+            extDir = _context.getExternalFilesDir(null);
+        }
+        if (extDir == null) {
+            extDir = new File("/storage/emulated/0");
+        }
         return GsFileUtils.join(
-                Environment.getExternalStorageDirectory(),
+                extDir,
                 "Documents",
                 rstr(R.string.app_name).toLowerCase(Locale.ROOT));
     }
@@ -851,19 +869,25 @@ public class AppSettings extends GsSharedPreferencesPropertyBackend {
                 return _cu.getAppDataPrivateDir(_context);
             }
             case "internal_storage": {
-                return Environment.getExternalStorageDirectory();
+                // Android 16 上 Environment.getExternalStorageDirectory() 可能返回 null
+                File dir = null;
+                try {
+                    dir = Environment.getExternalStorageDirectory();
+                } catch (Exception ignored) {
+                }
+                return dir != null ? dir : getNotebookDirectory();
             }
             case "appdata_sdcard_1": {
                 if (appDataPublicDirs.size() > 0) {
                     return appDataPublicDirs.get(0).first;
                 }
-                return Environment.getExternalStorageDirectory();
+                return getNotebookDirectory();
             }
             case "appdata_sdcard_2": {
                 if (appDataPublicDirs.size() > 1) {
                     return appDataPublicDirs.get(1).first;
                 }
-                return Environment.getExternalStorageDirectory();
+                return getNotebookDirectory();
             }
             case "appdata_public": {
                 appDataPublicDirs = _cu.getAppDataPublicDirs(_context, true, false, false);

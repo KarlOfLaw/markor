@@ -195,10 +195,16 @@ public class GsFontPreferenceCompat extends ListPreference {
         final List<File> checkedDirs = new ArrayList<>(Arrays.asList(
                 new File(getContext().getFilesDir(), ".app/fonts"),
                 new File(getContext().getFilesDir(), ".app/Fonts"),
-                additionalyCheckedFolder,
-                new File(Environment.getExternalStorageDirectory(), "fonts"),
-                new File(Environment.getExternalStorageDirectory(), "Fonts")
+                additionalyCheckedFolder
         ));
+        try {
+            final File extDir = Environment.getExternalStorageDirectory();
+            if (extDir != null) {
+                checkedDirs.add(new File(extDir, "fonts"));
+                checkedDirs.add(new File(extDir, "Fonts"));
+            }
+        } catch (Exception ignored) {
+        }
 
         // Also check external storage directories, at the respective root and data directory
         for (File externalFileDir : ContextCompat.getExternalFilesDirs(getContext(), null)) {

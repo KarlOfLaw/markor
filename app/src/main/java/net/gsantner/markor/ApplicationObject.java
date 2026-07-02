@@ -77,10 +77,21 @@ public class ApplicationObject extends MultiDexApplication {
     }
 
     /**
-     * 将崩溃信息写入 /sdcard/markor_crash_logs/crash_yyyy-MM-dd_HH-mm-ss.log
+     * 将崩溃信息写入外部存储或应用私有目录（优先外部存储）下的 markor_crash_logs 文件夹
      */
     private void saveCrashLog(final Throwable throwable) {
-        final File crashDir = new File(Environment.getExternalStorageDirectory(), CRASH_LOG_DIR_NAME);
+        File baseDir = null;
+        try {
+            baseDir = Environment.getExternalStorageDirectory();
+        } catch (Exception ignored) {
+        }
+        if (baseDir == null) {
+            baseDir = getExternalFilesDir(null);
+        }
+        if (baseDir == null) {
+            baseDir = getFilesDir();
+        }
+        final File crashDir = new File(baseDir, CRASH_LOG_DIR_NAME);
         if (!crashDir.exists() && !crashDir.mkdirs()) {
             return;
         }

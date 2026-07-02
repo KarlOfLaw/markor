@@ -665,14 +665,24 @@ public class GsContextUtils {
     @SuppressWarnings("StatementWithEmptyBody")
     public List<Pair<File, String>> getAppDataPublicDirs(final Context context, boolean internalStorageFolder, boolean sdcardFolders, boolean storageNameWithoutType) {
         List<Pair<File, String>> dirs = new ArrayList<>();
+        final File extDir;
+        try {
+            extDir = Environment.getExternalStorageDirectory();
+        } catch (Exception e) {
+            return dirs;
+        }
+        if (extDir == null) {
+            return dirs;
+        }
+        final String extPath = extDir.getAbsolutePath();
         for (File externalFileDir : ContextCompat.getExternalFilesDirs(context, null)) {
-            if (externalFileDir == null || Environment.getExternalStorageDirectory() == null) {
+            if (externalFileDir == null) {
                 continue;
             }
-            boolean isInt = externalFileDir.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().getAbsolutePath());
+            boolean isInt = externalFileDir.getAbsolutePath().startsWith(extPath);
             boolean add = (internalStorageFolder && isInt) || (sdcardFolders && !isInt);
             if (add) {
-                dirs.add(new Pair<>(externalFileDir, getStorageName(externalFileDir, storageNameWithoutType)));
+                dirs.add(new Pair<>(externalFileDir, getStorageName(externalFileDir, storageNameWithoutType, extPath)));
                 if (!externalFileDir.exists() && externalFileDir.mkdirs()) ;
             }
         }
@@ -680,7 +690,18 @@ public class GsContextUtils {
     }
 
     public String getStorageName(final File externalFileDir, final boolean storageNameWithoutType) {
-        boolean isInt = externalFileDir.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().getAbsolutePath());
+        final File extDir;
+        try {
+            extDir = Environment.getExternalStorageDirectory();
+        } catch (Exception e) {
+            return "Storage";
+        }
+        final String extPath = extDir != null ? extDir.getAbsolutePath() : "";
+        return getStorageName(externalFileDir, storageNameWithoutType, extPath);
+    }
+
+    private String getStorageName(final File externalFileDir, final boolean storageNameWithoutType, final String extPath) {
+        boolean isInt = externalFileDir.getAbsolutePath().startsWith(extPath);
 
         String[] split = externalFileDir.getAbsolutePath().split("/");
         if (split.length > 2) {
@@ -1598,7 +1619,13 @@ public class GsContextUtils {
     public static File extractFileFromIntent(final Intent receivingIntent, final Context context) {
         final String action = receivingIntent.getAction();
         final String type = receivingIntent.getType();
-        final String extPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        final File extDir;
+        try {
+            extDir = Environment.getExternalStorageDirectory();
+        } catch (Exception e) {
+            return null;
+        }
+        final String extPath = extDir != null ? extDir.getAbsolutePath() : "";
         final Uri fileUri = getUriFromIntent(receivingIntent, context);
 
         String tmps;
@@ -1687,8 +1714,8 @@ public class GsContextUtils {
                 result = checkPath(sarr[0]);
             }
 
-            if (result == null && sarr[1] != null) {
-                result = checkPath(Environment.getExternalStorageDirectory() + "/" + sarr[1]);
+            if (result == null && sarr[1] != null && extDir != null) {
+                result = checkPath(extDir + "/" + sarr[1]);
             }
         }
 
@@ -2394,6 +2421,9 @@ public class GsContextUtils {
                 intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
                 activity.startActivityForResult(intent, REQUEST_STORAGE_PERMISSION_R);
             }
+            // Android 11+ 使用 MANAGE_EXTERNAL_STORAGE 模型，
+            // WRITE_EXTERNAL_STORAGE 已废弃且在 Android 16 上可能抛出异常
+            return;
         }
 
         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION_M);
@@ -2419,7 +2449,18 @@ public class GsContextUtils {
 
         // Android R Manage-All-Files permission
         if (v >= android.os.Build.VERSION_CODES.R) {
-            return Environment.isExternalStorageManager();
+            try {
+                return Environment.isExternalStorageManager();
+            } catch (Exception e) {
+                Log.d(GsContextUtils.class.getName(), "isExternalStorageManager check failed: " + e.getMessage());
+                // 降级：尝试检查默认目录是否可写
+                try {
+                    final File dir = Environment.getExternalStorageDirectory();
+                    return dir != null && dir.canWrite();
+                } catch (Exception ignored) {
+                }
+                return false;
+            }
         }
 
         // Android M permissions
@@ -2428,10 +2469,19 @@ public class GsContextUtils {
         }
 
         // In case unsure, check if anything is writable at external storage
-        for (final File f : Environment.getExternalStorageDirectory() != null ? Environment.getExternalStorageDirectory().listFiles() : new File[0]) {
-            if (f.canWrite()) {
-                return true;
+        try {
+            final File extDir = Environment.getExternalStorageDirectory();
+            if (extDir != null) {
+                final File[] files = extDir.listFiles();
+                if (files != null) {
+                    for (final File f : files) {
+                        if (f.canWrite()) {
+                            return true;
+                        }
+                    }
+                }
             }
+        } catch (Exception ignored) {
         }
 
         return false;
