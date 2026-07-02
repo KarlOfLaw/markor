@@ -51,6 +51,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # ── 4.1 移除阿里云镜像（CI 环境不在中国，阿里云经常 502）
+      #     保留官方仓库（Google / Maven Central / JitPack）
+      - name: Remove Aliyun mirrors for CI
+        run: |
+          sed -i '/maven.aliyun.com/d' build.gradle
+          sed -i '/maven.aliyun.com/d' app/build.gradle || true
+          echo "✅ Aliyun mirrors removed for CI build"
+
       # ── 5. 执行构建 ──────────────────────────────────────
       # 使用 assembleFlavorDefaultDebug 只构建 default flavor 的 debug 变体，
       # 速度最快；如需构建全部 flavor 可改为 assembleDebug
