@@ -166,14 +166,9 @@ public abstract class TextConverterBase {
             return darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT;
         }
 
-        // Custom CSS theme: read user-entered CSS code from preferences (Typora-style)
+        // Custom CSS theme: use default theme as base, custom CSS is injected later
+        // with higher priority (after format-specific CSS) to ensure it overrides everything
         if (themeKey.equals("custom")) {
-            final AppSettings as = AppSettings.get(context);
-            final String customCss = as.getCustomMarkdownCssContent();
-            if (!TextUtils.isEmpty(customCss)) {
-                return customCss;
-            }
-            // Fallback to auto theme if no custom CSS configured
             return darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT;
         }
 
@@ -246,9 +241,9 @@ public abstract class TextConverterBase {
             html += HTML003_RIGHT_TO_LEFT;
         }
 
-        // When theme is "custom", custom CSS is already served via getPreviewThemeCss() - skip duplicate
-        final String extraCss = themeKey.equals("custom") ? "" : as.getCustomMarkdownCssContent();
-        html += head + extraCss + as.getInjectedHeader();
+        // Always inject custom CSS after format-specific CSS so it has highest cascade priority
+        final String customCss = as.getCustomMarkdownCssContent();
+        html += head + customCss + as.getInjectedHeader();
 
         html += HTML_ON_PAGE_LOAD_S + onLoadJs + HTML_ON_PAGE_LOAD_E;
 
