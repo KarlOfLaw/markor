@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -901,7 +902,7 @@ public class GsFileBrowserListAdapter extends RecyclerView.Adapter<GsFileBrowser
         //########################
         //## UI Binding
         //########################
-        final LinearLayout itemRoot;
+        final FrameLayout itemRoot;
         final ImageView image;
         final TextView title;
         final TextView description;
