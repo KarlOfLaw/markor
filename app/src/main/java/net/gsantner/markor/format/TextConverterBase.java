@@ -12,6 +12,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
@@ -243,6 +244,8 @@ public abstract class TextConverterBase {
 
         // Always inject custom CSS after format-specific CSS so it has highest cascade priority
         final String customCss = as.getCustomMarkdownCssContent();
+        Log.d("MarkorCSS", "theme=" + themeKey + " customCssLen=" + customCss.length()
+                + " preview=" + (customCss.length() > 100 ? customCss.substring(0, 100) : customCss));
         html += head + customCss + as.getInjectedHeader();
 
         html += HTML_ON_PAGE_LOAD_S + onLoadJs + HTML_ON_PAGE_LOAD_E;

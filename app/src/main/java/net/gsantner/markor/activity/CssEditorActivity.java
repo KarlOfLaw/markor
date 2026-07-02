@@ -9,6 +9,7 @@ package net.gsantner.markor.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -45,6 +46,7 @@ public class CssEditorActivity extends MarkorBaseActivity {
 
         // Load current CSS code from preferences
         String currentCss = _appSettings.getCustomMarkdownCssCode();
+        Log.d("MarkorCSS", "EDITOR_LOAD cssLen=" + currentCss.length());
         if (!TextUtils.isEmpty(currentCss)) {
             _cssEditor.setText(currentCss);
             _cssEditor.setSelection(currentCss.length());
@@ -72,6 +74,8 @@ public class CssEditorActivity extends MarkorBaseActivity {
 
     private void saveCss() {
         String css = _cssEditor.getText().toString();
+        Log.d("MarkorCSS", "EDITOR_SAVE cssLen=" + css.length()
+                + " preview=" + (css.length() > 100 ? css.substring(0, 100) : css));
         _appSettings.setString(R.string.pref_key__custom_markdown_css, css);
         Toast.makeText(this, R.string.custom_css_saved, Toast.LENGTH_SHORT).show();
     }

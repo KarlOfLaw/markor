@@ -992,18 +992,54 @@ public class AppSettings extends GsSharedPreferencesPropertyBackend {
 
     /**
      * Get the custom markdown preview CSS content, wrapped in &lt;style&gt; tags if needed.
+     * Supports both direct CSS code input and file path input (auto-detection).
      * Returns empty string if no custom CSS is configured.
      */
     public String getCustomMarkdownCssContent() {
-        final String css = getCustomMarkdownCssCode();
-        if (TextUtils.isEmpty(css)) {
+        final String input = getCustomMarkdownCssCode();
+        if (TextUtils.isEmpty(input)) {
             return "";
         }
+
+        String css = input;
+
+        // Auto-detect: if the input looks like a file path, try to read the file
+        final String trimmed = input.trim();
+        if (looksLikeFilePath(trimmed)) {
+            try {
+                final File cssFile = new File(trimmed);
+                if (cssFile.isFile() && cssFile.canRead()) {
+                    final String fileContent = GsFileUtils.readTextFile(cssFile);
+                    if (!TextUtils.isEmpty(fileContent)) {
+                        css = fileContent;
+                    }
+                }
+            } catch (Exception ignored) {
+                // File not accessible, use input as-is
+            }
+        }
+
         // Wrap bare CSS (no <style> tag) so it works inside HTML head
         if (!css.contains("<style")) {
             return "<style type='text/css'>" + css + "</style>";
         }
         return css;
+    }
+
+    /**
+     * Check if the input string looks like a file path rather than CSS code.
+     * Detects absolute paths (starting with /) and strings ending with .css extension.
+     */
+    private static boolean looksLikeFilePath(String input) {
+        if (input.startsWith("/")) {
+            return true;
+        }
+        final String lower = input.toLowerCase(Locale.ROOT);
+        if (lower.endsWith(".css")) {
+            // Verify it doesn't also contain CSS syntax (to avoid false positives)
+            return !input.contains("{") && !input.contains(":");
+        }
+        return false;
     }
 
     public String getUnorderedListCharacter() {
