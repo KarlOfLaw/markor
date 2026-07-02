@@ -522,21 +522,14 @@ public class MainActivity extends MarkorBaseActivity implements GsFileBrowserFra
     }
 
     class SectionsPagerAdapter extends FragmentStateAdapter {
-        private final boolean[] _realized;
 
         SectionsPagerAdapter(FragmentManager fragMgr) {
             super(fragMgr, MainActivity.this.getLifecycle());
-            final int count = _bottomNav.getMenu().size();
-            _realized = new boolean[count];
-            _realized[_viewPager.getCurrentItem()] = true; // only the visible page is real at start
         }
 
         @NonNull
         @Override
         public Fragment createFragment(final int pos) {
-            if (!_realized[pos]) {
-                return new Fragment(); // placeholder, replaced when realized
-            }
             final GsFragmentBase<?, ?> frag;
             final int id = tabIdFromPos(pos);
             if (id == R.id.nav_quicknote) {
@@ -559,32 +552,20 @@ public class MainActivity extends MarkorBaseActivity implements GsFileBrowserFra
 
         @Override
         public long getItemId(final int position) {
-            return position * 2L + (_realized[position] ? 1 : 0);
+            return position;
         }
 
         @Override
         public boolean containsItem(final long itemId) {
-            final int pos = (int) (itemId / 2L);
-            if (pos < 0 || pos >= _realized.length) {
-                return false;
-            }
-            final boolean realId = (itemId % 2L) == 1L;
-            return _realized[pos] == realId;
+            return itemId >= 0 && itemId < getItemCount();
         }
 
         void ensureRealized(final int pos) {
-            if (pos < 0 || pos >= _realized.length || _realized[pos]) {
-                return;
-            }
-            _realized[pos] = true;
-            notifyItemChanged(pos);
+            // 所有 Fragment 在 createFragment 时直接创建，无需延迟实现
         }
 
         void restoreFragment(final int pos) {
-            if (pos < 0 || pos >= _realized.length) {
-                return;
-            }
-            _realized[pos] = true;
+            // Fragment 由 FragmentStateAdapter 内部管理状态恢复
         }
     }
 

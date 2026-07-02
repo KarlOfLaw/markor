@@ -343,7 +343,7 @@ public class DocumentActivity extends MarkorBaseActivity {
         if (fragment != getCurrentVisibleFragment()) {
             _fragManager.beginTransaction()
                     .replace(R.id.document__placeholder_fragment, fragment, fragment.getFragmentTag())
-                    .commit();
+                    .commitAllowingStateLoss();
 
             supportInvalidateOptionsMenu();
         }

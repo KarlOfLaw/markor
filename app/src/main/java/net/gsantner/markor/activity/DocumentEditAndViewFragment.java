@@ -650,7 +650,9 @@ public class DocumentEditAndViewFragment extends MarkorBaseFragment implements F
             }
             case R.id.action_search: {
                 setViewModeVisibility(false);
-                _format.getActions().onSearch();
+                if (_format != null) {
+                    _format.getActions().onSearch();
+                }
                 return true;
             }
             case R.id.action_send_debug_log: {
@@ -1140,14 +1142,15 @@ public class DocumentEditAndViewFragment extends MarkorBaseFragment implements F
     }
 
     public void updateViewModeText() {
-        if (_webView == null) {
+        if (_webView == null || _format == null || _format.getConverter() == null) {
             return;
         }
         // Don't let text to view mode crash app
+        final TextConverterBase converter = _format.getConverter();
         try {
-            _format.getConverter().convertMarkupShowInWebView(_document, getTextString(), getActivity(), _webView, _nextConvertToPrintMode, _lineNumbersView.isLineNumbersEnabled());
+            converter.convertMarkupShowInWebView(_document, getTextString(), getActivity(), _webView, _nextConvertToPrintMode, _lineNumbersView.isLineNumbersEnabled());
         } catch (OutOfMemoryError e) {
-            _format.getConverter().convertMarkupShowInWebView(_document, "updateViewModeText getTextString(): OutOfMemory  " + e, getActivity(), _webView, _nextConvertToPrintMode, _lineNumbersView.isLineNumbersEnabled());
+            converter.convertMarkupShowInWebView(_document, "updateViewModeText getTextString(): OutOfMemory  " + e, getActivity(), _webView, _nextConvertToPrintMode, _lineNumbersView.isLineNumbersEnabled());
         }
     }
 
@@ -1169,54 +1172,60 @@ public class DocumentEditAndViewFragment extends MarkorBaseFragment implements F
     @SuppressLint({"SetJavaScriptEnabled"})
     private void setupWebViewIfNeeded(final Activity activity) {
         if (_webView == null) {
-            _webView = (WebView) _webViewStub.inflate();
-            _webView.setWebChromeClient(new GsWebViewChromeClient(_webView, activity, activity.findViewById(R.id.document__fragment_fullscreen_overlay)));
-            _webView.addJavascriptInterface(this, "Android");
-            _webView.setBackgroundColor(Color.TRANSPARENT);
-            WebSettings webSettings = _webView.getSettings();
-            webSettings.setBuiltInZoomControls(true);
-            webSettings.setDisplayZoomControls(false);
-            webSettings.setTextZoom((int) (_appSettings.getDocumentViewFontSize(_document.path) * VIEW_FONT_SCALE));
-            webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-            webSettings.setDatabaseEnabled(true);
-            webSettings.setGeolocationEnabled(false);
-            webSettings.setJavaScriptEnabled(true);
-            webSettings.setDomStorageEnabled(true);
-            webSettings.setAllowContentAccess(true);
-            webSettings.setAllowFileAccess(true);
-            webSettings.setAllowFileAccessFromFileURLs(false);
-            webSettings.setAllowUniversalAccessFromFileURLs(false);
-            webSettings.setMediaPlaybackRequiresUserGesture(false);
+            try {
+                _webView = (WebView) _webViewStub.inflate();
+                _webView.setWebChromeClient(new GsWebViewChromeClient(_webView, activity, activity.findViewById(R.id.document__fragment_fullscreen_overlay)));
+                _webView.addJavascriptInterface(this, "Android");
+                _webView.setBackgroundColor(Color.TRANSPARENT);
+                WebSettings webSettings = _webView.getSettings();
+                webSettings.setBuiltInZoomControls(true);
+                webSettings.setDisplayZoomControls(false);
+                webSettings.setTextZoom((int) (_appSettings.getDocumentViewFontSize(_document.path) * VIEW_FONT_SCALE));
+                webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+                webSettings.setDatabaseEnabled(true);
+                webSettings.setGeolocationEnabled(false);
+                webSettings.setJavaScriptEnabled(true);
+                webSettings.setDomStorageEnabled(true);
+                webSettings.setAllowContentAccess(true);
+                webSettings.setAllowFileAccess(true);
+                webSettings.setAllowFileAccessFromFileURLs(false);
+                webSettings.setAllowUniversalAccessFromFileURLs(false);
+                webSettings.setMediaPlaybackRequiresUserGesture(false);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && BuildConfig.IS_TEST_BUILD && BuildConfig.DEBUG) {
-                WebView.setWebContentsDebuggingEnabled(true); // Inspect on computer Chromium browser: chrome://inspect/#devices
-            }
-
-            _webViewClient = new MarkorWebViewClient(_webView, activity);
-            _webView.setWebViewClient(_webViewClient);
-
-            if (_webView instanceof DraggableScrollbarWebView) {
-                ((DraggableScrollbarWebView) _webView).setOnDispatchKeyListener(this::onWebViewKeyDown);
-            }
-
-            // For showing and copying link address in view-mode
-            _webView.setOnLongClickListener(v -> {
-                WebView.HitTestResult hitResult = _webView.getHitTestResult();
-                if (hitResult.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
-                    final String url = hitResult.getExtra();
-                    if (url != null) {
-                        Snackbar snackbar = Snackbar.make(_webView, url, Snackbar.LENGTH_LONG).setAction(getString(R.string.copy), view -> {
-                            Context context = getContext();
-                            _cu.setClipboard(context, url);
-                            Toast.makeText(context, getString(R.string.link_copied), Toast.LENGTH_SHORT).show();
-                        });
-                        snackbar.setAnchorView(_textActionsBar);
-                        snackbar.show();
-                        return true;
-                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && BuildConfig.IS_TEST_BUILD && BuildConfig.DEBUG) {
+                    WebView.setWebContentsDebuggingEnabled(true); // Inspect on computer Chromium browser: chrome://inspect/#devices
                 }
-                return false;
-            });
+
+                _webViewClient = new MarkorWebViewClient(_webView, activity);
+                _webView.setWebViewClient(_webViewClient);
+
+                if (_webView instanceof DraggableScrollbarWebView) {
+                    ((DraggableScrollbarWebView) _webView).setOnDispatchKeyListener(this::onWebViewKeyDown);
+                }
+
+                // For showing and copying link address in view-mode
+                _webView.setOnLongClickListener(v -> {
+                    WebView.HitTestResult hitResult = _webView.getHitTestResult();
+                    if (hitResult.getType() == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
+                        final String url = hitResult.getExtra();
+                        if (url != null) {
+                            Snackbar snackbar = Snackbar.make(_webView, url, Snackbar.LENGTH_LONG).setAction(getString(R.string.copy), view -> {
+                                Context context = getContext();
+                                _cu.setClipboard(context, url);
+                                Toast.makeText(context, getString(R.string.link_copied), Toast.LENGTH_SHORT).show();
+                            });
+                            snackbar.setAnchorView(_textActionsBar);
+                            snackbar.show();
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            } catch (Exception e) {
+                Log.e(getClass().getName(), "WebView setup failed: " + e.getMessage(), e);
+                _webView = null;
+                Toast.makeText(activity, "WebView 初始化失败，请检查系统 WebView 更新", Toast.LENGTH_LONG).show();
+            }
         }
         if (_format != null) {
             _format.getActions().setUiReferences(activity, _hlEditor, _webView);
@@ -1236,9 +1245,22 @@ public class DocumentEditAndViewFragment extends MarkorBaseFragment implements F
         }
 
         show |= _document.isBinaryFileNoTextLoading();
-        _format.getActions().recreateActionButtons(_textActionsBar, show ? ActionButtonBase.ActionItem.DisplayMode.VIEW : ActionButtonBase.ActionItem.DisplayMode.EDIT);
+        if (_format != null) {
+            _format.getActions().recreateActionButtons(_textActionsBar, show ? ActionButtonBase.ActionItem.DisplayMode.VIEW : ActionButtonBase.ActionItem.DisplayMode.EDIT);
+        }
         if (show) {
             setupWebViewIfNeeded(activity);
+            // WebView 初始化失败时降级到编辑模式
+            if (_webView == null) {
+                show = false;
+                _isPreviewVisible = false;
+                if (_format != null) {
+                    _format.getActions().recreateActionButtons(_textActionsBar, ActionButtonBase.ActionItem.DisplayMode.EDIT);
+                }
+                setActionBarVisibility();
+                ((AppCompatActivity) activity).supportInvalidateOptionsMenu();
+                return;
+            }
             updateViewModeText();
             _cu.showSoftKeyboard(activity, false, _hlEditor);
             _hlEditor.clearFocus();
@@ -1278,7 +1300,7 @@ public class DocumentEditAndViewFragment extends MarkorBaseFragment implements F
 
     @Override
     protected boolean onToolbarLongClicked(View v) {
-        if (isVisible() && isResumed()) {
+        if (isVisible() && isResumed() && _format != null) {
             _format.getActions().runJumpBottomTopAction(_isPreviewVisible ? ActionButtonBase.ActionItem.DisplayMode.VIEW : ActionButtonBase.ActionItem.DisplayMode.EDIT);
             return true;
         }
