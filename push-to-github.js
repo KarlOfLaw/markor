@@ -19,11 +19,13 @@ if (!PAT) {
   console.error('\n创建步骤：');
   console.error('  1. 打开 https://github.com/settings/tokens');
   console.error('  2. 点击 "Generate new token" → "Generate new token (classic)"');
-  console.error('  3. 勾选 Scope: repo（全部子项）');
+  console.error('  3. 勾选以下两个 Scope：');
+  console.error('     ☑ repo（全部子项）— 推送源码');
+  console.error('     ☑ workflow — 推送 .github/workflows 文件（关键！）');
   console.error('  4. 生成后复制令牌');
   console.error('  5. 在终端执行：');
-  console.error('     set PAT=你的令牌');
-  console.error(`     node ${path.basename(__filename)}`);
+  console.error('     export PAT=你的令牌');
+  console.error(`     ${process.argv[0]} ${path.basename(__filename)}`);
   process.exit(1);
 }
 
