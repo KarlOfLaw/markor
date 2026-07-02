@@ -982,36 +982,28 @@ public class AppSettings extends GsSharedPreferencesPropertyBackend {
         return getString(R.string.pref_key__markdown_view_theme, "default");
     }
 
-    public String getCustomMarkdownCssFilePath() {
-        return getString(R.string.pref_key__custom_markdown_css_file, "");
+    /**
+     * Get the user's custom CSS code directly from preferences (Typora-style inline CSS).
+     * Returns the raw CSS string, or empty string if not configured.
+     */
+    public String getCustomMarkdownCssCode() {
+        return getString(R.string.pref_key__custom_markdown_css, "");
     }
 
     /**
-     * Read the custom markdown preview CSS file from disk.
-     * Returns file contents wrapped in &lt;style&gt; tags, or empty string if not configured / not found.
+     * Get the custom markdown preview CSS content, wrapped in &lt;style&gt; tags if needed.
+     * Returns empty string if no custom CSS is configured.
      */
     public String getCustomMarkdownCssContent() {
-        final String path = getCustomMarkdownCssFilePath();
-        if (TextUtils.isEmpty(path)) {
+        final String css = getCustomMarkdownCssCode();
+        if (TextUtils.isEmpty(css)) {
             return "";
         }
-        try {
-            final File cssFile = new File(path);
-            if (!cssFile.isFile() || !cssFile.canRead()) {
-                return "";
-            }
-            final String css = GsFileUtils.readTextFile(cssFile);
-            if (TextUtils.isEmpty(css)) {
-                return "";
-            }
-            // Wrap bare CSS (no <style> tag) so it works inside HTML head
-            if (!css.contains("<style")) {
-                return "<style type='text/css'>" + css + "</style>";
-            }
-            return css;
-        } catch (Exception e) {
-            return "";
+        // Wrap bare CSS (no <style> tag) so it works inside HTML head
+        if (!css.contains("<style")) {
+            return "<style type='text/css'>" + css + "</style>";
         }
+        return css;
     }
 
     public String getUnorderedListCharacter() {

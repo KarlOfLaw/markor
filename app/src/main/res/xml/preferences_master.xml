@@ -438,9 +438,9 @@
             <androidx.preference.EditTextPreference
                 android:defaultValue="@string/empty_string"
                 android:icon="@drawable/ic_add_white_24dp"
-                android:key="@string/pref_key__custom_markdown_css_file"
-                android:summary="@string/custom_markdown_css_file_summary"
-                android:title="@string/custom_markdown_css_file" />
+                android:key="@string/pref_key__custom_markdown_css"
+                android:summary="@string/custom_markdown_css_summary"
+                android:title="@string/custom_markdown_css" />
         </PreferenceCategory>
 
         <PreferenceCategory android:title="@string/text">

@@ -166,7 +166,7 @@ public abstract class TextConverterBase {
             return darkTheme ? HTML002_HEAD_WITH_STYLE_DARK : HTML002_HEAD_WITH_STYLE_LIGHT;
         }
 
-        // Custom CSS theme: read from user-specified CSS file (Typora-style)
+        // Custom CSS theme: read user-entered CSS code from preferences (Typora-style)
         if (themeKey.equals("custom")) {
             final AppSettings as = AppSettings.get(context);
             final String customCss = as.getCustomMarkdownCssContent();
